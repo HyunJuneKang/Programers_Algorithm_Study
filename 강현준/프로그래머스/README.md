@@ -1,196 +1,56 @@
-# [level 3] 없어진 기록 찾기 - 59042 
+# [level 3] 단속카메라 - 42884 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/59042?language=oracle) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/42884) 
 
 ### 성능 요약
 
-메모리: undefined, 시간: 
+메모리: 60.3 MB, 시간: 6.21 ms
 
 ### 구분
 
-코딩테스트 연습 > JOIN
+코딩테스트 연습 > 탐욕법（Greedy）
 
 ### 채점결과
 
-합계: 100.0 / 100.0
+정확성: 50.0<br/>효율성: 50.0<br/>합계: 100.0 / 100.0
 
 ### 제출 일자
 
-2026년 06월 25일 18:30:45
+2026년 06월 25일 18:43:37
 
 ### 문제 설명
 
-<p><code>ANIMAL_INS</code> 테이블은 동물 보호소에 들어온 동물의 정보를 담은 테이블입니다. <code>ANIMAL_INS</code> 테이블 구조는 다음과 같으며, <code>ANIMAL_ID</code>, <code>ANIMAL_TYPE</code>, <code>DATETIME</code>, <code>INTAKE_CONDITION</code>, <code>NAME</code>, <code>SEX_UPON_INTAKE</code>는 각각 동물의 아이디, 생물 종, 보호 시작일, 보호 시작 시 상태, 이름, 성별 및 중성화 여부를 나타냅니다.</p>
-<table class="table">
-        <thead><tr>
-<th>NAME</th>
-<th>TYPE</th>
-<th>NULLABLE</th>
-</tr>
-</thead>
-        <tbody><tr>
-<td>ANIMAL_ID</td>
-<td>VARCHAR(N)</td>
-<td>FALSE</td>
-</tr>
-<tr>
-<td>ANIMAL_TYPE</td>
-<td>VARCHAR(N)</td>
-<td>FALSE</td>
-</tr>
-<tr>
-<td>DATETIME</td>
-<td>DATETIME</td>
-<td>FALSE</td>
-</tr>
-<tr>
-<td>INTAKE_CONDITION</td>
-<td>VARCHAR(N)</td>
-<td>FALSE</td>
-</tr>
-<tr>
-<td>NAME</td>
-<td>VARCHAR(N)</td>
-<td>TRUE</td>
-</tr>
-<tr>
-<td>SEX_UPON_INTAKE</td>
-<td>VARCHAR(N)</td>
-<td>FALSE</td>
-</tr>
-</tbody>
-      </table>
-<p><code>ANIMAL_OUTS</code> 테이블은 동물 보호소에서 입양 보낸 동물의 정보를 담은 테이블입니다. <code>ANIMAL_OUTS</code> 테이블 구조는 다음과 같으며, <code>ANIMAL_ID</code>, <code>ANIMAL_TYPE</code>, <code>DATETIME</code>, <code>NAME</code>, <code>SEX_UPON_OUTCOME</code>는 각각 동물의 아이디, 생물 종, 입양일, 이름, 성별 및 중성화 여부를 나타냅니다. <code>ANIMAL_OUTS</code> 테이블의 <code>ANIMAL_ID</code>는 <code>ANIMAL_INS</code>의 <code>ANIMAL_ID</code>의 외래 키입니다.</p>
-<table class="table">
-        <thead><tr>
-<th>NAME</th>
-<th>TYPE</th>
-<th>NULLABLE</th>
-</tr>
-</thead>
-        <tbody><tr>
-<td>ANIMAL_ID</td>
-<td>VARCHAR(N)</td>
-<td>FALSE</td>
-</tr>
-<tr>
-<td>ANIMAL_TYPE</td>
-<td>VARCHAR(N)</td>
-<td>FALSE</td>
-</tr>
-<tr>
-<td>DATETIME</td>
-<td>DATETIME</td>
-<td>FALSE</td>
-</tr>
-<tr>
-<td>NAME</td>
-<td>VARCHAR(N)</td>
-<td>TRUE</td>
-</tr>
-<tr>
-<td>SEX_UPON_OUTCOME</td>
-<td>VARCHAR(N)</td>
-<td>FALSE</td>
-</tr>
-</tbody>
-      </table>
-<p>천재지변으로 인해 일부 데이터가 유실되었습니다. 입양을 간 기록은 있는데, 보호소에 들어온 기록이 없는 동물의 ID와 이름을 ID 순으로 조회하는 SQL문을 작성해주세요. </p>
+<p>고속도로를 이동하는 모든 차량이 고속도로를 이용하면서 단속용 카메라를 한 번은 만나도록 카메라를 설치하려고 합니다.</p>
 
-<h5>예시</h5>
+<p>고속도로를 이동하는 차량의 경로 routes가 매개변수로 주어질 때, 모든 차량이 한 번은 단속용 카메라를 만나도록 하려면 최소 몇 대의 카메라를 설치해야 하는지를 return 하도록 solution 함수를 완성하세요.</p>
 
-<p>예를 들어, <code>ANIMAL_INS</code> 테이블과 <code>ANIMAL_OUTS</code> 테이블이 다음과 같다면</p>
-
-<p><code>ANIMAL_INS</code></p>
-<table class="table">
-        <thead><tr>
-<th>ANIMAL_ID</th>
-<th>ANIMAL_TYPE</th>
-<th>DATETIME</th>
-<th>INTAKE_CONDITION</th>
-<th>NAME</th>
-<th>SEX_UPON_INTAKE</th>
-</tr>
-</thead>
-        <tbody><tr>
-<td>A352713</td>
-<td>Cat</td>
-<td>2017-04-13 16:29:00</td>
-<td>Normal</td>
-<td>Gia</td>
-<td>Spayed Female</td>
-</tr>
-<tr>
-<td>A350375</td>
-<td>Cat</td>
-<td>2017-03-06 15:01:00</td>
-<td>Normal</td>
-<td>Meo</td>
-<td>Neutered Male</td>
-</tr>
-</tbody>
-      </table>
-<p><code>ANIMAL_OUTS</code></p>
-<table class="table">
-        <thead><tr>
-<th>ANIMAL_ID</th>
-<th>ANIMAL_TYPE</th>
-<th>DATETIME</th>
-<th>NAME</th>
-<th>SEX_UPON_OUTCOME</th>
-</tr>
-</thead>
-        <tbody><tr>
-<td>A349733</td>
-<td>Dog</td>
-<td>2017-09-27 19:09:00</td>
-<td>Allie</td>
-<td>Spayed Female</td>
-</tr>
-<tr>
-<td>A352713</td>
-<td>Cat</td>
-<td>2017-04-25 12:25:00</td>
-<td>Gia</td>
-<td>Spayed Female</td>
-</tr>
-<tr>
-<td>A349990</td>
-<td>Cat</td>
-<td>2018-02-02 14:18:00</td>
-<td>Spice</td>
-<td>Spayed Female</td>
-</tr>
-</tbody>
-      </table>
-<p><code>ANIMAL_OUTS</code> 테이블에서</p>
+<p><strong>제한사항</strong></p>
 
 <ul>
-<li>Allie의 ID는 <code>ANIMAL_INS</code>에 없으므로, Allie의 데이터는 유실되었습니다.</li>
-<li>Gia의 ID는 <code>ANIMAL_INS</code>에 있으므로, Gia의 데이터는 유실되지 않았습니다.</li>
-<li>Spice의 ID는 <code>ANIMAL_INS</code>에 없으므로, Spice의 데이터는 유실되었습니다.</li>
+<li>차량의 대수는 1대 이상 10,000대 이하입니다.</li>
+<li>routes에는 차량의 이동 경로가 포함되어 있으며 routes[i][0]에는 i번째 차량이 고속도로에 진입한 지점, routes[i][1]에는 i번째 차량이 고속도로에서 나간 지점이 적혀 있습니다.</li>
+<li>차량의 진입/진출 지점에 카메라가 설치되어 있어도 카메라를 만난것으로 간주합니다.</li>
+<li>차량의 진입 지점, 진출 지점은 -30,000 이상 30,000 이하입니다.</li>
 </ul>
 
-<p>따라서 SQL문을 실행하면 다음과 같이 나와야 합니다. </p>
+<p><strong>입출력 예</strong></p>
 <table class="table">
         <thead><tr>
-<th>ANIMAL_ID</th>
-<th>NAME</th>
+<th>routes</th>
+<th>return</th>
 </tr>
 </thead>
         <tbody><tr>
-<td>A349733</td>
-<td>Allie</td>
-</tr>
-<tr>
-<td>A349990</td>
-<td>Spice</td>
+<td>[[-20,-15], [-14,-5], [-18,-13], [-5,-3]]</td>
+<td>2</td>
 </tr>
 </tbody>
       </table>
-<hr>
+<p><strong>입출력 예 설명</strong></p>
 
-<p>본 문제는 <a href="https://www.kaggle.com/aaronschlegel/austin-animal-center-shelter-intakes-and-outcomes" target="_blank" rel="noopener">Kaggle의 "Austin Animal Center Shelter Intakes and Outcomes"</a>에서 제공하는 데이터를 사용하였으며 <a href="https://opendatacommons.org/licenses/odbl/1.0/" target="_blank" rel="noopener">ODbL</a>의 적용을 받습니다.</p>
+<p>-5 지점에 카메라를 설치하면 두 번째, 네 번째 차량이 카메라를 만납니다.</p>
+
+<p>-15 지점에 카메라를 설치하면 첫 번째, 세 번째 차량이 카메라를 만납니다.</p>
 
 
 > 출처: 프로그래머스 코딩 테스트 연습, https://school.programmers.co.kr/learn/challenges
