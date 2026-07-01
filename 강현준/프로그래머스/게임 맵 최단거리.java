@@ -3,7 +3,7 @@ class Solution {
     static class Status{
         int x;
         int y;
-        int distance; //depth
+        int distance;
 
         Status(int x ,int y, int distance){
             this.x = x;
@@ -15,12 +15,6 @@ class Solution {
     static int[] dx = {1 , 0 , -1 , 0};
     static int[] dy = {0 , 1 ,  0 , -1};
     
-    
-    
-    
-    
-    // 해당 좌표의 depth 무조건 최단 cost? 라 하겠습니
-    // 필요한 정보 좌표
     public int solution(int[][] maps) {
         isVisited = new boolean[maps.length][maps[0].length];
         Deque<Status> dq = new ArrayDeque<>();
@@ -31,8 +25,6 @@ class Solution {
             if(curPos.x == maps.length-1 && curPos.y == maps[0].length-1 ){
                 return curPos.distance;
             }
-            //for문을 안쓰면 
-
             for(int i = 0; i < 4; i++){
                 int nx = curPos.x + dx[i]; 
                 int ny = curPos.y + dy[i];
